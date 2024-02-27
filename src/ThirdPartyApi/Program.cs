@@ -28,7 +28,6 @@ hostBuilder.ConfigureServices((context, services) =>
             config.PersonalAccessToken = thirdPartyApiConfiguration.PersonalAccessToken;
         },
         clientBuilder => clientBuilder.AddTransientHttpErrorPolicy(policy => policy
-            .OrResult(result => result.StatusCode != HttpStatusCode.ServiceUnavailable)
             .WaitAndRetryAsync(Backoff.DecorrelatedJitterBackoffV2(TimeSpan.FromSeconds(1), retryCount: 5))));
 
     services.AddTransient<IDemoService, ThirdPartyApiClientV1DemoService>();
